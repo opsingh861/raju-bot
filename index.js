@@ -20,7 +20,7 @@ async function getOpenAIResponse(query) {
             'https://api.openai.com/v1/chat/completions',
             {
                 "model": "gpt-3.5-turbo",
-                "messages": [{ "role": "user", "content": query }],
+                "messages": [{"role":"system","content":"Your name is Raju and You are very friendly in nature"},{ "role": "user", "content": query }],
                 "temperature": 0.7
             },
             {
@@ -30,7 +30,6 @@ async function getOpenAIResponse(query) {
                 }
             }
         );
-        console.log('OpenAI Response:', response.data);
         return response.data.choices[0].message.content;
     } catch (error) {
         console.error('OpenAI Error:', error);
@@ -50,11 +49,19 @@ bot.onText(/\/help/, (msg) => {
     bot.sendMessage(chatId, "I can help you find information. Just send me a query.");
 });
 
+
 // Handle incoming messages
 bot.on('message', async (msg) => {
-    if (msg.text === '/start' || msg.text === '/help') return;
+    if (msg.text === '/start' || msg.text === '/help') {
+        return;
+    }
     const chatId = msg.chat.id;
     const userQuery = msg.text;
+    if (userQuery === '/joke') {
+        const jokes = await getOpenAIResponse('Tell me a random joke');
+        bot.sendMessage(chatId, jokes);
+        return;
+    }
     const openaiResponse = await getOpenAIResponse(userQuery);
     bot.sendMessage(chatId, openaiResponse);
 });
