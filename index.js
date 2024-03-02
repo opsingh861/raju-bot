@@ -72,7 +72,7 @@ app.listen(3000, () => {
     setInterval(async () => {
         try {
             const data = await axios.get('http://localhost:3000')
-            console.log(data)
+            console.log('Pinging the server');
         } catch (error) {
             console.error('Error pinging the server:', error);
         }
