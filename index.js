@@ -67,8 +67,16 @@ bot.on('text', async (ctx) => {
 });
 
 
-bot.launch();
 
 app.listen(3000, () => {
+    setInterval(async () => {
+        try {
+            const data = await axios.get('http://localhost:3000')
+            console.log(data)
+        } catch (error) {
+            console.error('Error pinging the server:', error);
+        }
+    }, 1000 * 60 * 3);
     console.log("Server running on port 3000");
+    bot.launch();
 });
